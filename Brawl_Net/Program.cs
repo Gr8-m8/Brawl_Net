@@ -40,11 +40,7 @@ namespace Brawl__Net_
                 }
 
                 Console.Title = "Lobby";
-                if (host)
-                {
-                    Console.Title += " Host";
-                }
-
+                if (host) { Console.Title += " Host"; }
                 bool lobby = true;
                 while (lobby)
                 {
@@ -69,17 +65,17 @@ namespace Brawl__Net_
                         Console.WriteLine(playerList);
                         GM.players.Add(NM.Recive());
 
-                        Console.WriteLine("Wait for players. [Y]es ([Any -N]) / [N]o");
+                        Console.WriteLine("Wait for players. Yes [Any] / No [Q]");
                         switch (Console.ReadKey().KeyChar.ToString().ToUpper())
                         {
-                            case "N":
+                            case "Q":
                                 lobby = false;
 
                                 foreach (string p in GM.players)
                                 {
                                     if (p != hostIP)
                                     {
-                                        NM.Send(p, "ExitLobby");
+                                        NM.Send(p, "EXITLOBBY");
                                     }
                                 }
                                 
@@ -94,7 +90,7 @@ namespace Brawl__Net_
                     {
                         switch (NM.Recive())
                         {
-                            case "ExitLobby":
+                            case "EXITLOBBY":
                                 lobby = false;
                                 break;
 
@@ -111,15 +107,21 @@ namespace Brawl__Net_
                 {
                     Console.Clear();
 
-                    GM.NextTurn(NM);
-
-                    switch (NM.Recive())
+                    string recive = NM.Recive();
+                    switch (recive)
                     {
                         case "PLAY":
+                            Console.WriteLine("Your Turn");
+                            Console.ReadKey();
+                            NM.Send(hostIP, "NEXTTURN");
+                            break;
+
+                        case "NEXTTURN":
+                            GM.NextTurn(NM);
                             break;
 
                         default:
-                            Console.WriteLine("RAYMAN, YEAAAEEAEAAAA");
+                            Console.WriteLine(recive);
                             break;
                     }
                 }
