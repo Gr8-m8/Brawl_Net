@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Brawl__Net_
+namespace Brawl_Net
 {
     class Player
     {

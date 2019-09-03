@@ -3,7 +3,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Brawl__Net_
+namespace Brawl_Net
 {
     class NetworkManager
     {
@@ -52,14 +52,6 @@ namespace Brawl__Net_
         public string getIP()
         {
             string ip = "";
-            /*
-            for (int i = 0; i < Dns.GetHostEntry(Dns.GetHostName()).AddressList.Length; i++)
-            {
-                if (Dns.GetHostEntry(Dns.GetHostName()).AddressList[i].AddressFamily == AddressFamily.InterNetwork) {
-                    ip += "+" + Dns.GetHostEntry(Dns.GetHostName()).AddressList[i].ToString();
-                }
-            }
-            */
 
             using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
             {
