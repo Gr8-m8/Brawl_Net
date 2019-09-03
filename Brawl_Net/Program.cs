@@ -127,6 +127,7 @@ namespace Brawl__Net_
                 }
             }
 
+            Console.WriteLine();
             Console.Write("-- END --");
             Console.ReadKey();
             return 0;
