@@ -4,26 +4,25 @@ namespace Brawl_Net
 {
     class Program
     {
+
         static void Main()
         {
             Random r = new Random();
             NetworkManager NM = new NetworkManager();
             GameManager GM = new GameManager();
-            string hostIP = "127.0.0.1";
-            bool host = true;
-            bool lan = true;
+            
 
             bool programLoop = true;
             while (programLoop)
             {
-                Setup(r, NM, GM, lan, hostIP, host);
-                Lobby(r, NM, GM, lan, hostIP, host);
-                Game (r, NM, GM, lan, hostIP, host);
+                Setup(r, NM, GM);
+                Lobby(r, NM, GM);
+                Game (r, NM, GM);
             }
         }
 
         //SETUP
-        static void Setup(Random r, NetworkManager NM, GameManager GM, bool lan, string hostIP, bool host)
+        static void Setup(Random r, NetworkManager NM, GameManager GM)
         {
             Console.Clear();
             Console.Title = "SetUp";
@@ -32,7 +31,7 @@ namespace Brawl_Net
             switch (Console.ReadKey().KeyChar.ToString().ToUpper())
             {
                 case "Q":
-                    GM.players.Add(hostIP);
+                    GM.players.Add(new Player(GM.hostIP));
                     break;
 
                 case "E":
@@ -40,50 +39,48 @@ namespace Brawl_Net
                     break;
 
                 case "W":
-                    lan = false;
+                    GM.lan = false;
                     break;
 
                 default:
-                    host = false;
+                    GM.host = false;
                     Console.Write("Host IP: ");
-                    hostIP = Console.ReadLine();
+                    GM.hostIP = Console.ReadLine();
 
-                    NM.Send(hostIP, NM.getIP());
+                    NM.Send(GM.hostIP, NM.getIP());
                     break;
             }
         }
 
         //LOBBY
-        static void Lobby(Random r, NetworkManager NM, GameManager GM, bool lan, string hostIP, bool host)
+        static void Lobby(Random r, NetworkManager NM, GameManager GM)
         {
-            if (!lan)
-            {
-                Console.Title = "Lobby";
-            }
-            if (host) { Console.Title += " Host"; }
+            Console.Title = "Lobby";
+            if (GM.host) { Console.Title += " Host"; }
+            if (!GM.lan) { Console.Title += " Offline"; }
             bool lobby = true;
-            while (lobby)
+            while (lobby && GM.lan)
             {
                 Console.Clear();
                 Console.WriteLine("Players:");
 
-                if (host)
+                if (GM.host)
                 {
                     string playerList = "";
-                    foreach (string p in GM.players)
+                    foreach (Player p in GM.players)
                     {
-                        foreach (string s in GM.players)
+                        foreach (Player s in GM.players)
                         {
-                            playerList += s + " \n";
+                            playerList += s.ip + " \n";
                         }
 
-                        if (p != hostIP)
+                        if (p.ip != GM.hostIP)
                         {
-                            NM.Send(p, playerList);
+                            NM.Send(p.ip, playerList);
                         }
                     }
                     Console.WriteLine(playerList);
-                    GM.players.Add(NM.Recive());
+                    GM.players.Add(new Player(NM.Recive()));
 
                     Console.WriteLine("Wait for players. Yes [Any] / No [Q]");
                     switch (Console.ReadKey().KeyChar.ToString().ToUpper())
@@ -91,11 +88,11 @@ namespace Brawl_Net
                         case "Q":
                             lobby = false;
 
-                            foreach (string p in GM.players)
+                            foreach (Player p in GM.players)
                             {
-                                if (p != hostIP)
+                                if (p.ip != GM.hostIP)
                                 {
-                                    NM.Send(p, "EXITLOBBY");
+                                    NM.Send(p.ip, "EXITLOBBY");
                                 }
                             }
 
@@ -120,36 +117,71 @@ namespace Brawl_Net
                     }
                 }
             }
+
+            while(lobby && !GM.lan)
+            {
+                Console.Clear();
+                Console.Write("Players: " + GM.players.Count);
+                Console.WriteLine();
+                Console.WriteLine("Add Player [+], Remove Player [-], Game [Any]");
+                switch (Console.ReadKey().KeyChar.ToString().ToUpper())
+                {
+                    case "+":
+                        GM.players.Add(new Player("127.0.0.1"));
+                        break;
+
+                    case "-":
+                        GM.players.Remove(GM.players[GM.players.Count - 1]);
+                        break;
+
+                    default:
+                        lobby = false;
+                        break;
+                }
+            }
         }
 
         //GAME
-        static void Game(Random r, NetworkManager NM, GameManager GM, bool lan, string hostIP, bool host)
+        static void Game(Random r, NetworkManager NM, GameManager GM)
         {
             Console.Title = "Game";
-            if (host)
+            if (GM.host)
             {
                 GM.NextTurn(NM, r.Next(0, GM.players.Count - 1));
             }
+
+            string recive = "";
 
             bool gameLoop = true;
             while (gameLoop)
             {
                 Console.Clear();
 
-                string recive = NM.Recive();
-                switch (recive)
+                if (GM.lan)
                 {
-                    case "PLAY":
-                        GM.Play(NM, hostIP);
-                        break;
+                    switch (NM.Recive())
+                    {
+                        case "PLAY":
+                            GM.Play(NM);
+                            break;
 
-                    case "NEXTTURN":
-                        GM.NextTurn(NM);
-                        break;
+                        case "NEXTTURN":
+                            GM.NextTurn(NM);
+                            break;
 
-                    default:
-                        Console.WriteLine(recive);
-                        break;
+                        case "GETCHARACTER":
+                            NM.Send(GM.players[GM.playerTurn].ip, GM.players[GM.playerTurn].character.WriteStats());
+                            break;
+
+                        default:
+                            Console.WriteLine(recive);
+                            break;
+                    }
+                }
+
+                if (!GM.lan)
+                {
+                    GM.Play(NM);
                 }
             }
         }

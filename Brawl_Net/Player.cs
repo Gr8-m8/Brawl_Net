@@ -8,34 +8,46 @@ namespace Brawl_Net
 {
     class Player
     {
+        public string ip = "";
+        public Character character = new Character();
+
+        public Player(string setip)
+        {
+            ip = setip;
+        }
+    }
+
+    class Character
+    {
         string name = "";
 
+        int hpMax = 100;
         int hp = 100;
 
-        int strengh = 1;
-        int psyce = 1;
-        int endurance = 1;
-        int agility = 1;
-        int charisma = 1;
-        int luck = 1;
+        int strengh = 10;
+        int psyce = 10;
+        int endurance = 10;
+        int agility = 10;
+        int charisma = 10;
+        int luck = 10;
 
-        public Player()
+        public Character()
         {
-
+            GenerateCharacter();
         }
 
-        public void GeneratePlayer()
+        public void GenerateCharacter()
         {
             Random r = new Random();
 
-            strengh = r.Next(1, 10);
-            psyce = r.Next(1, 10);
-            endurance = r.Next(1, 10);
-            agility = r.Next(1, 10);
-            charisma = r.Next(1, 10);
-            luck = r.Next(1, 10);
+            strengh = r.Next(3, 18);
+            psyce = r.Next(3, 18);
+            endurance = r.Next(3, 18);
+            agility = r.Next(3, 18);
+            charisma = r.Next(3, 18);
+            luck = r.Next(3, 18);
 
-            hp = r.Next(endurance, endurance*10);
+            hpMax = hp = r.Next(endurance, endurance * 10);
         }
 
         public virtual int Attack()
@@ -51,6 +63,18 @@ namespace Brawl_Net
         public virtual void Action()
         {
 
+        }
+
+        public string WriteStats()
+        {
+            return "" +
+            "Health   : " + hp + "/" + hpMax + "\n" +
+            "Strenght : " + strengh + "\n" +
+            "Psyce    : " + psyce + "\n" +
+            "Endurance: " + endurance + "\n" +
+            "Agility  : " + agility + "\n" +
+            "Charisma : " + charisma + "\n" +
+            "Luck     : " + luck;
         }
     }
 }
