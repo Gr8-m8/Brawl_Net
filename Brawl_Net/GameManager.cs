@@ -34,7 +34,7 @@ namespace Brawl_Net
             {
                 foreach (Player p in players)
                 {
-                    if (!host)
+                    if (p.ip != hostIP)
                     {
                         NM.Send(p.ip, "Player " + players[playerTurn].ip + " Turn.");
                     }
