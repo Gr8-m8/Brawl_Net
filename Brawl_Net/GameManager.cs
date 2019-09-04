@@ -41,7 +41,7 @@ namespace Brawl_Net
                     {
                         NM.Send(p.ip, "Player " + players[playerTurn].ip + " Turn.");
                     }
-                    else
+                    else if (host)
                     {
                         Console.WriteLine("Player " + players[playerTurn].ip + " Turn.");
                     }
@@ -52,7 +52,7 @@ namespace Brawl_Net
                 {
                     NM.Send(players[playerTurn].ip, "PLAY");
                 }
-                else
+                else if (host)
                 {
                     Play(NM);
                 }
@@ -75,7 +75,7 @@ namespace Brawl_Net
                 {
                     NM.Send(hostIP, "GETCHARACTER");
                     Console.WriteLine(NM.Recive());
-                } else
+                } else if (host)
                 {
                     Console.WriteLine(this.players[this.playerTurn].character.WriteStats());
                 }
@@ -115,7 +115,7 @@ namespace Brawl_Net
                 if (players[playerTurn].ip != hostIP)
                 {
                     NM.Send(hostIP, "NEXTTURN");
-                } else
+                } else if (host)
                 {
                     NextTurn(NM);
                 }
