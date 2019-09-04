@@ -16,8 +16,14 @@ namespace Brawl_Net
             while (programLoop)
             {
                 Setup(r, NM, GM);
+                Console.WriteLine("_");
+                Console.ReadKey();
                 Lobby(r, NM, GM);
+                Console.WriteLine("_");
+                Console.ReadKey();
                 Game (r, NM, GM);
+                Console.WriteLine("_");
+                Console.ReadKey();
             }
         }
 
@@ -56,8 +62,8 @@ namespace Brawl_Net
         static void Lobby(Random r, NetworkManager NM, GameManager GM)
         {
             Console.Title = "Lobby";
-            if (GM.host) { Console.Title += " Host"; }
-            if (!GM.lan) { Console.Title += " Offline"; }
+            if (GM.host) { Console.Title += " Host"; } else { Console.Title += "Client";  }
+            if (!GM.lan) { Console.Title += " Offline"; } else { Console.Title += "Online"; }
             bool lobby = true;
             while (lobby && GM.lan)
             {
@@ -86,16 +92,16 @@ namespace Brawl_Net
                     switch (Console.ReadKey().KeyChar.ToString().ToUpper())
                     {
                         case "Q":
-                            lobby = false;
-
                             foreach (Player p in GM.players)
                             {
+                                Console.WriteLine(p.ip);
                                 if (p.ip != GM.hostIP)
                                 {
                                     NM.Send(p.ip, "EXITLOBBY");
                                 }
                             }
 
+                            lobby = false;
                             break;
 
                         case "Y":
