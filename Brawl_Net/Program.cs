@@ -157,14 +157,18 @@ namespace Brawl_Net
             }
 
             string recive = "";
-
+            int _loops = 0;
             bool gameLoop = true;
             while (gameLoop)
             {
+                Console.WriteLine("Clear()");
+                Console.ReadKey();
                 Console.Clear();
+                Console.WriteLine("_loops: " + _loops);
 
                 if (GM.lan)
                 {
+                    Console.WriteLine("_is lan");
                     switch (NM.Recive())
                     {
                         case "PLAY":
@@ -183,6 +187,7 @@ namespace Brawl_Net
                             Console.WriteLine(recive);
                             break;
                     }
+                    Console.WriteLine("_recived");
                 }
             }
         }
