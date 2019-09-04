@@ -17,8 +17,6 @@ namespace Brawl_Net
 
         public void NextTurn(NetworkManager NM, int setPlayerTurn = -1)
         {
-            Console.WriteLine("_NextTurn()");
-
             if (setPlayerTurn >= 0 && setPlayerTurn < players.Count)
             {
                 playerTurn = setPlayerTurn;
@@ -34,39 +32,19 @@ namespace Brawl_Net
 
             if (lan)
             {
-                Console.WriteLine("_NextTurn(): is lan");
-                /*
-                foreach (Player p in players)
-                {
-                    if (p.ip != hostIP)
-                    {
-                        NM.Send(p.ip, "Player " + players[playerTurn].ip + " Turn.");
-                    }
-                    else if (host)
-                    {
-                        Console.WriteLine("Player " + players[playerTurn].ip + " Turn.");
-                    }
-
-                }
-                */
-
                 if (host)
                 {
-                    Console.WriteLine("_NextTurn(): host");
                     if (players[playerTurn].ip != hostIP)
                     {
-                        Console.WriteLine("_NextTurn(): host: p.ip != hostIP");
                         NM.Send(players[playerTurn].ip, "PLAY");
                     }
                     else
                     {
-                        Console.WriteLine("_NextTurn(): host: host");
                         Play(NM);
                     }
                 }
                 if (!host)
                 {
-                    Console.WriteLine("_NextTurn(): !host");
                     NM.Send(hostIP, "NEXTTURN");
                 }
             }
@@ -79,18 +57,15 @@ namespace Brawl_Net
 
         public void Play(NetworkManager NM)
         {
-            Console.WriteLine("_Play()");
             if (lan)
             {
                 Console.WriteLine("Your Turn.");
                 if (!host)
                 {
-                    Console.WriteLine("_Play(): !host");
                     NM.Send(hostIP, "GETCHARACTER");
                     Console.WriteLine(NM.Recive());
                 } else if (host)
                 {
-                    Console.WriteLine("_Play(): host");
                     Console.WriteLine(this.players[this.playerTurn].character.WriteStats());
                 }
             }
@@ -100,7 +75,6 @@ namespace Brawl_Net
                 Console.WriteLine(players[playerTurn].character.WriteStats());
             }
 
-            Console.WriteLine("_Play(): Action");
             Console.WriteLine("Contunue [Any], Attack [Q]");
             switch (Console.ReadKey().KeyChar.ToString().ToUpper())
             {
@@ -129,12 +103,10 @@ namespace Brawl_Net
             {
                 if (!host)
                 {
-                    Console.WriteLine("_Play() NT: !host");
                     NM.Send(hostIP, "NEXTTURN");
                 }
                 if (host)
                 {
-                    Console.WriteLine("_Play() NT: host");
                     NextTurn(NM);
                 }
             }
