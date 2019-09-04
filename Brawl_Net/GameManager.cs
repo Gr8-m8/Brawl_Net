@@ -50,15 +50,24 @@ namespace Brawl_Net
                 }
                 */
 
-                if (players[playerTurn].ip != hostIP)
-                {
-                    Console.WriteLine("_NextTurn(): p.ip != hostIP");
-                    NM.Send(players[playerTurn].ip, "PLAY");
-                }
-                else if (host)
+                if (host)
                 {
                     Console.WriteLine("_NextTurn(): host");
-                    Play(NM);
+                    if (players[playerTurn].ip != hostIP)
+                    {
+                        Console.WriteLine("_NextTurn(): host: p.ip != hostIP");
+                        NM.Send(players[playerTurn].ip, "PLAY");
+                    }
+                    else
+                    {
+                        Console.WriteLine("_NextTurn(): host: host");
+                        Play(NM);
+                    }
+                }
+                if (!host)
+                {
+                    Console.WriteLine("_NextTurn(): !host");
+                    NM.Send(hostIP, "NEXTTURN");
                 }
             }
 
@@ -74,9 +83,9 @@ namespace Brawl_Net
             if (lan)
             {
                 Console.WriteLine("Your Turn.");
-                if (players[playerTurn].ip != hostIP)
+                if (!host)
                 {
-                    Console.WriteLine("_Play(): p.ip != hostIP");
+                    Console.WriteLine("_Play(): !host");
                     NM.Send(hostIP, "GETCHARACTER");
                     Console.WriteLine(NM.Recive());
                 } else if (host)
@@ -118,11 +127,12 @@ namespace Brawl_Net
 
             if (lan)
             {
-                if (players[playerTurn].ip != hostIP)
+                if (!host)
                 {
-                    Console.WriteLine("_Play() NT: p.ip != hostIP");
+                    Console.WriteLine("_Play() NT: !host");
                     NM.Send(hostIP, "NEXTTURN");
-                } else if (host)
+                }
+                if (host)
                 {
                     Console.WriteLine("_Play() NT: host");
                     NextTurn(NM);

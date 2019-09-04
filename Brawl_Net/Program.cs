@@ -161,14 +161,14 @@ namespace Brawl_Net
             bool gameLoop = true;
             while (gameLoop)
             {
-                Console.WriteLine("Clear()");
+                Console.WriteLine("_Game(): Clear()");
                 Console.ReadKey();
                 Console.Clear();
-                Console.WriteLine("_loops: " + _loops);
+                Console.WriteLine("_Game(): loops: " + _loops);
 
                 if (GM.lan)
                 {
-                    Console.WriteLine("_is lan");
+                    Console.WriteLine("_Game(): is lan");
                     switch (NM.Recive())
                     {
                         case "PLAY":
