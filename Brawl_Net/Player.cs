@@ -33,21 +33,43 @@ namespace Brawl_Net
 
         public Character()
         {
-            GenerateCharacter();
+            GenerateCharacter(50);
         }
 
-        public void GenerateCharacter()
+        public void GenerateCharacter(int powerLevel = 0)
         {
             Random r = new Random();
 
-            strengh = r.Next(3, 18);
-            psyce = r.Next(3, 18);
-            endurance = r.Next(3, 18);
-            agility = r.Next(3, 18);
-            charisma = r.Next(3, 18);
-            luck = r.Next(3, 18);
+            if (powerLevel <= 0)
+            {
+                strengh = r.Next(3, 18);
+                psyce = r.Next(3, 18);
+                endurance = r.Next(3, 18);
+                agility = r.Next(3, 18);
+                charisma = r.Next(3, 18);
+                luck = r.Next(3, 18);
 
-            hpMax = hp = r.Next(endurance, endurance * 10);
+                hpMax = hp = r.Next(endurance, endurance * 10);
+            } else //66
+            {
+                int[] tempstats = new int[6] { 3, 3, 3, 3, 3, 3};
+                while (powerLevel > 0)
+                {
+                    tempstats[r.Next(0, 6)] += 1;
+                    powerLevel--;
+                }
+
+                strengh = tempstats[0];
+                psyce = tempstats[1];
+                endurance = tempstats[2];
+                agility = tempstats[3];
+                charisma = tempstats[4];
+                luck = tempstats[5];
+
+                hpMax = hp = endurance * 10;
+            }
+
+            
         }
 
         public virtual int Attack()
