@@ -162,8 +162,7 @@ namespace Brawl_Net
             while (gameLoop)
             {
                 Console.WriteLine("_Game(): Clear()");
-                Console.ReadKey();
-                Console.Clear();
+                //Console.Clear();
                 Console.WriteLine("_Game(): loops: " + _loops);
 
                 if (GM.lan)
