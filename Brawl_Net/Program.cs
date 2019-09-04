@@ -75,7 +75,7 @@ namespace Brawl_Net
                             playerList += s.ip + " \n";
                         }
 
-                        if (!GM.host)
+                        if (p.ip != GM.hostIP)
                         {
                             NM.Send(p.ip, playerList);
                         }
@@ -89,7 +89,7 @@ namespace Brawl_Net
                         case "Q":
                             foreach (Player p in GM.players)
                             {
-                                if (!GM.host)
+                                if (p.ip != GM.hostIP)
                                 {
                                     NM.Send(p.ip, "EXITLOBBY");
                                 }
