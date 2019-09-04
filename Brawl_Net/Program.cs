@@ -16,14 +16,9 @@ namespace Brawl_Net
             while (programLoop)
             {
                 Setup(r, NM, GM);
-                Console.WriteLine("_");
-                Console.ReadKey();
                 Lobby(r, NM, GM);
-                Console.WriteLine("_");
-                Console.ReadKey();
                 Game (r, NM, GM);
-                Console.WriteLine("_");
-                Console.ReadKey();
+
             }
         }
 
@@ -80,7 +75,7 @@ namespace Brawl_Net
                             playerList += s.ip + " \n";
                         }
 
-                        if (p.ip != GM.hostIP)
+                        if (!GM.host)
                         {
                             NM.Send(p.ip, playerList);
                         }
@@ -94,8 +89,7 @@ namespace Brawl_Net
                         case "Q":
                             foreach (Player p in GM.players)
                             {
-                                Console.WriteLine(p.ip);
-                                if (p.ip != GM.hostIP)
+                                if (!GM.host)
                                 {
                                     NM.Send(p.ip, "EXITLOBBY");
                                 }
@@ -150,6 +144,7 @@ namespace Brawl_Net
         //GAME
         static void Game(Random r, NetworkManager NM, GameManager GM)
         {
+            Console.Clear();
             Console.Title = "Game";
             if (GM.host)
             {
@@ -183,11 +178,6 @@ namespace Brawl_Net
                             Console.WriteLine(recive);
                             break;
                     }
-                }
-
-                if (!GM.lan)
-                {
-                    GM.Play(NM);
                 }
             }
         }

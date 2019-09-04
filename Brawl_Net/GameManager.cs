@@ -34,13 +34,31 @@ namespace Brawl_Net
             {
                 foreach (Player p in players)
                 {
-                    NM.Send(p.ip, "Player " + players[playerTurn].ip + " Turn.");
+                    if (!host)
+                    {
+                        NM.Send(p.ip, "Player " + players[playerTurn].ip + " Turn.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Player " + players[playerTurn].ip + " Turn.");
+                    }
 
                 }
-                NM.Send(players[playerTurn].ip, "PLAY");
+
+                if (!host)
+                {
+                    NM.Send(players[playerTurn].ip, "PLAY");
+                }
+                else
+                {
+                    Play(NM);
+                }
             }
 
-            
+            if (!lan)
+            {
+                Play(NM);
+            }
         }
 
         public void Play(NetworkManager NM)
@@ -48,7 +66,13 @@ namespace Brawl_Net
             if (lan)
             {
                 Console.WriteLine("Your Turn.");
-                NM.Send(hostIP, "GETCHARACTER");
+                if (!host)
+                {
+                    NM.Send(hostIP, "GETCHARACTER");
+                } else
+                {
+                    Console.WriteLine(this.players[this.playerTurn].character.WriteStats());
+                }
             }
             if (!lan)
             {
@@ -82,7 +106,13 @@ namespace Brawl_Net
 
             if (lan)
             {
-                NM.Send(hostIP, "NEXTTURN");
+                if (!host)
+                {
+                    NM.Send(hostIP, "NEXTTURN");
+                } else
+                {
+                    NextTurn(NM);
+                }
             }
             if (!lan)
             {
