@@ -17,6 +17,9 @@ namespace Brawl_Net
 
         public void NextTurn(NetworkManager NM, int setPlayerTurn = -1)
         {
+            Console.WriteLine("_NextTurn");
+            Console.ReadKey();
+
             if (setPlayerTurn >= 0 && setPlayerTurn < players.Count)
             {
                 playerTurn = setPlayerTurn;
@@ -63,12 +66,15 @@ namespace Brawl_Net
 
         public void Play(NetworkManager NM)
         {
+            Console.WriteLine("_Play");
+            Console.ReadKey();
             if (lan)
             {
                 Console.WriteLine("Your Turn.");
                 if (players[playerTurn].ip != hostIP)
                 {
                     NM.Send(hostIP, "GETCHARACTER");
+                    Console.WriteLine(NM.Recive());
                 } else
                 {
                     Console.WriteLine(this.players[this.playerTurn].character.WriteStats());

@@ -145,10 +145,15 @@ namespace Brawl_Net
         static void Game(Random r, NetworkManager NM, GameManager GM)
         {
             Console.Clear();
-            Console.Title = "Game";
+            Console.Title = "Game ";
             if (GM.host)
             {
+                Console.Title += "Host";
                 GM.NextTurn(NM, r.Next(0, GM.players.Count - 1));
+            }
+            else
+            {
+                Console.Title += "Client";
             }
 
             string recive = "";
