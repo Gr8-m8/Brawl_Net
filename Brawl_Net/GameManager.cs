@@ -57,6 +57,7 @@ namespace Brawl_Net
 
         public void Play(NetworkManager NM)
         {
+            Console.Clear();
             if (lan)
             {
                 Console.WriteLine("Your Turn.");
@@ -75,27 +76,11 @@ namespace Brawl_Net
                 Console.WriteLine(players[playerTurn].character.WriteStats());
             }
 
-            Console.WriteLine("Contunue [Any], Attack [Q]");
+            Console.WriteLine("\n" + "Contunue [Any], Attack [Q]" + "\n");
             switch (Console.ReadKey().KeyChar.ToString().ToUpper())
             {
                 case "Q":
-                    Console.Clear();
-                    if (lan)
-                    {
-
-                    }
-                    if (!lan)
-                    {
-                        Console.Write("Target ");
-                        int i = 0;
-                        foreach (Player p in players)
-                        {
-                            i++;
-                            Console.Write("Player " + i + "[" + i + "] ");
-                        }
-
-                        
-                    }
+                    PlayerAttack();
                     break;
             }
 
@@ -114,6 +99,40 @@ namespace Brawl_Net
             {
                 NextTurn(NM);
             }
+        }
+
+        void PlayerAttack()
+        {
+            if (lan)
+            {
+
+            }
+            if (!lan)
+            {
+                Console.Write("\n" + "Target(s) " + "\n");
+                int i = 0;
+                foreach (Player p in players)
+                {
+                    i++;
+                    Console.Write("Player " + i + " [" + i + "] ");
+
+                    if (p != players[players.Count - 1])
+                    {
+                        Console.Write(" : ");
+                    }
+                }
+
+                string target = Console.ReadLine().ToString().ToUpper();
+                if (int.TryParse(target, out int n))
+                {
+                    if (0 < n && n <= players.Count)
+                    {
+                        int damage = players[playerTurn].character.Attack();
+                        Console.WriteLine("Dealt " + damage + " Damage reduced to " + players[n - 1].character.Damage(damage) + " to Player " + n);
+                    }
+                }
+            }
+            Console.ReadKey();
         }
     }
 }

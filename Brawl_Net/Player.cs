@@ -19,10 +19,17 @@ namespace Brawl_Net
 
     class Character
     {
+        Random r = new Random();
+
+        bool dead = false;
+
         string name = "";
 
         int hpMax = 100;
         int hp = 100;
+
+        int staminaMax = 100;
+        int stamina = 100;
 
         int strengh = 10;
         int psyce = 10;
@@ -38,7 +45,7 @@ namespace Brawl_Net
 
         public void GenerateCharacter(int powerLevel = 0)
         {
-            Random r = new Random();
+            
 
             if (powerLevel <= 0)
             {
@@ -50,6 +57,7 @@ namespace Brawl_Net
                 luck = r.Next(3, 18);
 
                 hpMax = hp = r.Next(endurance, endurance * 10);
+                staminaMax = stamina = r.Next(agility, agility * 10);
             } else //66
             {
                 int[] tempstats = new int[6] { 3, 3, 3, 3, 3, 3};
@@ -67,6 +75,7 @@ namespace Brawl_Net
                 luck = tempstats[5];
 
                 hpMax = hp = endurance * 10;
+                staminaMax = staminaMax = agility * 10;
             }
 
             
@@ -74,12 +83,30 @@ namespace Brawl_Net
 
         public virtual int Attack()
         {
-            return 0;
+            int crit = 1;
+            if (r.Next(100) < luck)
+            {
+                crit = 2;
+            }
+            return strengh * crit;
         }
 
-        public virtual bool Dodge()
+        public virtual int Damage(int damageIn)
         {
-            return false;
+            int crit = 1;
+            if (r.Next(100) < luck)
+            {
+                crit = 2;
+            }
+            int damageTotal = damageIn * 10 / (endurance * crit);
+            hp -= damageTotal;
+
+            if (hp <= 0)
+            {
+                dead = true;
+            }
+
+            return damageTotal;
         }
 
         public virtual void Action()
@@ -91,6 +118,7 @@ namespace Brawl_Net
         {
             return "" +
             "Health   : " + hp + "/" + hpMax + "\n" +
+            "Stamina  : " + stamina + "/" + staminaMax + "\n" +
             "Strenght : " + strengh + "\n" +
             "Psyce    : " + psyce + "\n" +
             "Endurance: " + endurance + "\n" +

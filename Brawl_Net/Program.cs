@@ -122,8 +122,7 @@ namespace Brawl_Net
             {
                 Console.Clear();
                 Console.Write("Players: " + GM.players.Count);
-                Console.WriteLine();
-                Console.WriteLine("Add Player [+], Remove Player [-], Game [Any]");
+                Console.WriteLine( "\n" + "Add Player [+], Remove Player [-], Game [Any]" + "\n");
                 switch (Console.ReadKey().KeyChar.ToString().ToUpper())
                 {
                     case "+":
@@ -144,7 +143,6 @@ namespace Brawl_Net
         //GAME
         static void Game(Random r, NetworkManager NM, GameManager GM)
         {
-            Console.Clear();
             Console.Title = "Game ";
             if (GM.host)
             {
@@ -161,8 +159,6 @@ namespace Brawl_Net
             bool gameLoop = true;
             while (gameLoop)
             {
-                Console.Clear();
-
                 if (GM.lan)
                 {
                     switch (NM.Recive())
