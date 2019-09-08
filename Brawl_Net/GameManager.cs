@@ -76,11 +76,15 @@ namespace Brawl_Net
                 Console.WriteLine(players[playerTurn].character.WriteStats());
             }
 
-            Console.WriteLine("\n" + "Contunue [Any], Attack [Q]" + "\n");
+
+            Console.WriteLine("\n" + "Attack [Q], Skip [Any]" + "\n");
             switch (Console.ReadKey().KeyChar.ToString().ToUpper())
             {
                 case "Q":
                     PlayerAttack();
+                    break;
+
+                default:
                     break;
             }
 
@@ -99,6 +103,8 @@ namespace Brawl_Net
             {
                 NextTurn(NM);
             }
+
+            Console.WriteLine("\n" + "--END-OF-TURN--" + "\n");
         }
 
         void PlayerAttack()
